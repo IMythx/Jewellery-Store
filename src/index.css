@@ -1,0 +1,16 @@
+*,
+::before,
+::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+li {
+  list-style: none;
+}
+#root {
+  margin: 0 auto;
+  max-width: 1280px;
+  position: relative;
+}
