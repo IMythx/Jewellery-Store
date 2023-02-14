@@ -146,15 +146,17 @@ const Cart = ({ openCart, toggleCart }: Props): JSX.Element => {
         <Typography variant="body1">SUBTOTAL</Typography>
         <Typography variant="body1">${subTotal}</Typography>
       </Stack>
-      <Button
-        variant="contained"
-        onClick={() => {
-          toggleCart();
-          navigate("/checkout");
-        }}
-      >
-        CHECKOUT
-      </Button>
+      {cartItems.length > 0 && (
+        <Button
+          variant="contained"
+          onClick={() => {
+            toggleCart();
+            navigate("/checkout");
+          }}
+        >
+          CHECKOUT
+        </Button>
+      )}
     </Drawer>
   );
 };

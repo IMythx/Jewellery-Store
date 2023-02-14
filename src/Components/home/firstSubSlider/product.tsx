@@ -388,18 +388,7 @@ const Product = ({ src, brand, name, price, priceId }: Props): JSX.Element => {
                 }}
                 fullWidth
                 variant="contained"
-                onClick={() => {
-                  !isInCart &&
-                    dispatch(
-                      addItem({
-                        name,
-                        imgSrc: src[0],
-                        price,
-                        quantity: count,
-                        brand,
-                      })
-                    );
-                }}
+                onClick={onClickHandler}
               >
                 {!isInCart ? (
                   "Add to cart"

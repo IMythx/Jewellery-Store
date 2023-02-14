@@ -1,7 +1,7 @@
 import * as yup from "yup";
 import { Stack, Stepper, Step, StepLabel } from "@mui/material";
 import { useState } from "react";
-import { Formik } from "formik";
+import { Formik, FormikHelpers, FormikValues } from "formik";
 import AddressForm from "../Components/checkout/addressForm";
 import Payment from "../Components/checkout/payment";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
@@ -14,7 +14,12 @@ const Checkout = (): JSX.Element => {
 
   const cartItems = useAppSelector(cartItemsSelector);
 
-  const onSubmitHandler = (values: { [key: string]: string }) => {
+  const onSubmitHandler = (
+    values: FormikValues,
+    actions: FormikHelpers<FormikValues>
+  ) => {
+    actions.setTouched({});
+
     activeStep < 2 && setActiveSep((prev: number) => prev + 1);
 
     activeStep === 1 &&
@@ -22,7 +27,6 @@ const Checkout = (): JSX.Element => {
         type: "MAKE_PAYMENT",
         payload: {
           lineItems: cartItems.map((item) => {
-            console.log(item!.priceId);
             return {
               price: item!.priceId,
               quantity: item!.quantity,
@@ -109,7 +113,7 @@ const validationSechema = [
   }),
 ];
 
-const initialValues = {
+const initialValues: FormikValues = {
   firstName: "",
   lastName: "",
   country: "",

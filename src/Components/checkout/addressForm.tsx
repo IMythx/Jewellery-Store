@@ -1,16 +1,17 @@
 import { Typography, Grid, TextField, Button } from "@mui/material";
+import { FormikErrors, FormikTouched } from "formik";
 import { Fragment } from "react";
 
 interface Props {
   values: {
     [key: string]: string;
   };
-  errors: {
+  errors: FormikErrors<{
     [key: string]: string;
-  };
-  touched: {
+  }>;
+  touched: FormikTouched<{
     [key: string]: boolean;
-  };
+  }>;
   handleBlur: React.FocusEventHandler<HTMLInputElement>;
   handleChange: React.ChangeEventHandler<HTMLInputElement>;
   handleSubmit: () => void;

@@ -34,6 +34,7 @@ const ItemsList = (): JSX.Element => {
               name={key}
               brand={data[`${key}`]?.brand}
               price={data[`${key}`]?.price}
+              priceId={data[`${key}`]?.priceId}
             />
           </Grid>
         ))}

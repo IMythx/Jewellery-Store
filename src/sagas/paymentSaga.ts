@@ -1,4 +1,4 @@
-import { takeEvery, takeLatest } from "redux-saga/effects";
+import { takeEvery } from "redux-saga/effects";
 import { loadStripe, Stripe } from "@stripe/stripe-js";
 import { PayloadAction } from "@reduxjs/toolkit";
 
@@ -12,17 +12,21 @@ interface actionPayload {
 }
 
 function* paymentWorker(action: PayloadAction<actionPayload>) {
-  const stripe: Stripe = yield stripePromise;
-  console.log(action.payload.lineItems);
-  yield stripe.redirectToCheckout({
-    mode: "payment",
-    lineItems: action.payload.lineItems,
-    successUrl: `${window.location.origin}/success`,
-    cancelUrl: window.location.origin,
-    customerEmail: action.payload.email,
-  });
+  try {
+    const stripe: Stripe = yield stripePromise;
+    yield stripe.redirectToCheckout({
+      mode: "payment",
+      lineItems: action.payload.lineItems,
+      successUrl: `${window.location.origin}/checkout/success`,
+      cancelUrl: window.location.origin,
+      customerEmail: action.payload.email,
+    });
+  } catch (e) {
+    console.log(e);
+    console.log("hello");
+  }
 }
 
 export default function* paymentWatcher() {
-  yield takeLatest("MAKE_PAYMENT", paymentWorker);
+  yield takeEvery("MAKE_PAYMENT", paymentWorker);
 }

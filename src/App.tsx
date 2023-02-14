@@ -15,6 +15,8 @@ import Shop from "./pages/shop";
 import NotFound from "./pages/notFound";
 import Notifications from "./Components/notifications/notifications";
 import Checkout from "./pages/checkout";
+import Success from "./pages/success";
+import Login from "./pages/login";
 
 function App() {
   const isLoading: boolean = useAppSelector(loadingSelector);
@@ -48,6 +50,8 @@ function App() {
               <Route element={<ItemDetails />} path={"shop/:item"} />
               <Route element={<Shop />} path={"/shop"} />
               <Route element={<Checkout />} path={"/checkout"} />
+              <Route element={<Success />} path={"/success"} />
+              <Route element={<Login />} path={"/account/login"} />
               <Route element={<Navigate to={"/notfound"} />} path={"*"} />
               <Route element={<NotFound />} path={"/notfound"} />
             </Routes>

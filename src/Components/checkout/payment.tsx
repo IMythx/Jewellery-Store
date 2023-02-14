@@ -1,16 +1,18 @@
 import { Stack, TextField, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
-
+import { useAppSelector } from "../../hooks/hooks";
+import { FormikErrors, FormikTouched } from "formik";
+import { cartItemsSelector } from "../../store/cartSlice";
 interface Props {
   values: {
     [key: string]: string;
   };
-  errors: {
+  errors: FormikErrors<{
     [key: string]: string;
-  };
-  touched: {
+  }>;
+  touched: FormikTouched<{
     [key: string]: boolean;
-  };
+  }>;
   handleBlur: React.FocusEventHandler<HTMLInputElement>;
   handleChange: React.ChangeEventHandler<HTMLInputElement>;
   handleSubmit: () => void;
@@ -26,12 +28,15 @@ const Payment = ({
   handleSubmit,
   onBackHandler,
 }: Props): JSX.Element => {
+  const cartItems = useAppSelector(cartItemsSelector);
+
   return (
     <Stack gap={"1rem"} mt={5}>
       <Typography variant="h6">Contact Info</Typography>
       <TextField
         label={"Email"}
         fullWidth
+        type="text"
         onBlur={handleBlur}
         onChange={handleChange}
         value={values.email}
@@ -42,6 +47,7 @@ const Payment = ({
       <TextField
         label={"Phone Number"}
         fullWidth
+        type="text"
         onBlur={handleBlur}
         onChange={handleChange}
         value={values.phoneNumber}
@@ -53,7 +59,12 @@ const Payment = ({
         <Button variant="contained" fullWidth onClick={onBackHandler}>
           BACK
         </Button>
-        <Button variant="contained" fullWidth onClick={handleSubmit}>
+        <Button
+          disabled={cartItems.length === 0}
+          variant="contained"
+          fullWidth
+          onClick={handleSubmit}
+        >
           PLACE ORDER
         </Button>
       </Stack>

@@ -4,8 +4,6 @@ import {
   Stack,
   Typography,
   useMediaQuery,
-  TextField,
-  IconButton,
   Badge,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
@@ -21,6 +19,8 @@ import SideBar from "./SideBar";
 import Cart from "./cart";
 import { useAppSelector } from "../../hooks/hooks";
 import { cartItemsSelector } from "../../store/cartSlice";
+import Search from "./search";
+
 const NavBar = (): JSX.Element => {
   const isTablet = useMediaQuery("(max-width:992px)");
 
@@ -35,6 +35,8 @@ const NavBar = (): JSX.Element => {
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
 
   const { search, pathname } = useLocation();
+
+  const toggleSearchBar = () => setShowSearchBar((prev: boolean) => !prev);
 
   useEffect(() => {
     showMenu && setShowMenu((prev: boolean) => !prev);
@@ -62,62 +64,7 @@ const NavBar = (): JSX.Element => {
           },
         }}
       >
-        {showSearchBar && (
-          <Stack
-            width={"100%"}
-            direction={"row"}
-            justifyContent={"center"}
-            alignItems={"center"}
-            sx={{
-              "& label.Mui-focused": {
-                color: "#5f5f5f",
-              },
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": {
-                  borderColor: "#000000",
-                  py: 2.3,
-                },
-                "&:hover fieldset": {
-                  borderColor: "#5f5f5f",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#5f5f5f",
-                },
-              },
-            }}
-          >
-            <TextField
-              sx={{
-                width: "500px",
-              }}
-              size="small"
-              label={"Search"}
-              InputProps={{
-                endAdornment: (
-                  <SearchIcon
-                    sx={{
-                      color: "text.secondary",
-                      "&:hover": {
-                        color: "#fff !important",
-                      },
-                    }}
-                  />
-                ),
-              }}
-            />
-            <IconButton>
-              <CloseIcon
-                sx={{
-                  color: "#fff !important",
-                  "&:hover": {
-                    color: "text.secondary",
-                  },
-                }}
-                onClick={() => setShowSearchBar((prev: boolean) => !prev)}
-              />
-            </IconButton>
-          </Stack>
-        )}
+        {showSearchBar && <Search toggleSearchBar={toggleSearchBar} />}
         {!showSearchBar && (
           <Fragment>
             {" "}
@@ -218,11 +165,11 @@ const NavBar = (): JSX.Element => {
                   fontSize: "1.7rem",
                   "&:hover": { color: "primary.main", scale: "1.1" },
                 }}
-                onClick={() => setShowSearchBar((prev: boolean) => !prev)}
+                onClick={toggleSearchBar}
               />
               <NavLink
                 className={({ isActive }) => (isActive ? "active" : "")}
-                to={"/login"}
+                to={"/account/login"}
               >
                 <PermIdentityIcon sx={{ fontSize: "1.7rem" }} />
               </NavLink>
