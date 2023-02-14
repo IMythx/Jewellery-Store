@@ -18,11 +18,16 @@ const Checkout = (): JSX.Element => {
     values: FormikValues,
     actions: FormikHelpers<FormikValues>
   ) => {
-    actions.setTouched({});
+    if (activeStep < 2) {
+      setActiveSep((prev: number) => prev + 1);
+      actions.setTouched({});
+    }
 
-    activeStep < 2 && setActiveSep((prev: number) => prev + 1);
+    if (activeStep === 0) {
+      actions.setSubmitting(false);
+    }
 
-    activeStep === 1 &&
+    (activeStep === 1 || activeStep === 2) &&
       dispatch({
         type: "MAKE_PAYMENT",
         payload: {
@@ -33,6 +38,7 @@ const Checkout = (): JSX.Element => {
             };
           }),
           email: values.email,
+          onSubmitFailure: () => actions.setSubmitting(false),
         },
       });
   };
@@ -67,6 +73,7 @@ const Checkout = (): JSX.Element => {
           handleBlur,
           handleChange,
           handleSubmit,
+          isSubmitting,
         }) =>
           activeStep === 0 ? (
             <AddressForm
@@ -86,6 +93,7 @@ const Checkout = (): JSX.Element => {
               handleChange={handleChange}
               handleSubmit={handleSubmit}
               onBackHandler={onBackHandler}
+              isSubmitting={isSubmitting}
             />
           )
         }

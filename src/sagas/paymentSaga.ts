@@ -9,6 +9,7 @@ const stripePromise = loadStripe(
 interface actionPayload {
   lineItems: { price: string; quantity: number }[];
   email: string;
+  onSubmitFailure: () => void;
 }
 
 function* paymentWorker(action: PayloadAction<actionPayload>) {
@@ -22,8 +23,7 @@ function* paymentWorker(action: PayloadAction<actionPayload>) {
       customerEmail: action.payload.email,
     });
   } catch (e) {
-    console.log(e);
-    console.log("hello");
+    action.payload.onSubmitFailure();
   }
 }
 

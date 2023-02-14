@@ -1,8 +1,9 @@
 import { Stack, TextField, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import { useAppSelector } from "../../hooks/hooks";
-import { FormikErrors, FormikTouched } from "formik";
+import { FormikErrors, FormikHandlers, FormikTouched } from "formik";
 import { cartItemsSelector } from "../../store/cartSlice";
+import { LoadingButton } from "@mui/lab";
 interface Props {
   values: {
     [key: string]: string;
@@ -17,6 +18,7 @@ interface Props {
   handleChange: React.ChangeEventHandler<HTMLInputElement>;
   handleSubmit: () => void;
   onBackHandler: () => void;
+  isSubmitting: boolean;
 }
 
 const Payment = ({
@@ -27,6 +29,7 @@ const Payment = ({
   handleChange,
   handleSubmit,
   onBackHandler,
+  isSubmitting,
 }: Props): JSX.Element => {
   const cartItems = useAppSelector(cartItemsSelector);
 
@@ -42,7 +45,7 @@ const Payment = ({
         value={values.email}
         name={"email"}
         error={touched["email"] && !!errors["email"]}
-        helperText={!!touched["email"] && errors["email"]}
+        helperText={touched["email"] && errors["email"]}
       />
       <TextField
         label={"Phone Number"}
@@ -53,20 +56,21 @@ const Payment = ({
         value={values.phoneNumber}
         name={"phoneNumber"}
         error={touched["phoneNumber"] && !!errors["phoneNumber"]}
-        helperText={!!touched["phoneNumber"] && errors["phoneNumber"]}
+        helperText={touched["phoneNumber"] && errors["phoneNumber"]}
       />
       <Stack direction={"row"} gap={"3rem"}>
         <Button variant="contained" fullWidth onClick={onBackHandler}>
           BACK
         </Button>
-        <Button
+        <LoadingButton
           disabled={cartItems.length === 0}
           variant="contained"
           fullWidth
           onClick={handleSubmit}
+          loading={isSubmitting}
         >
           PLACE ORDER
-        </Button>
+        </LoadingButton>
       </Stack>
     </Stack>
   );

@@ -8,7 +8,12 @@ const sagaMiddleware = createSagaMiddleware();
 
 const store = configureStore({
   reducer: { data: dataSlice.reducer, cart: cartSlice.reducer },
-  middleware: (gdfm) => gdfm().concat(sagaMiddleware),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ["MAKE_PAYMENT"],
+      },
+    }).concat(sagaMiddleware),
 });
 
 sagaMiddleware.run(rootSaga);
