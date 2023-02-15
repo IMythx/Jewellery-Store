@@ -22,6 +22,8 @@ interface Props {
 const Cart = ({ openCart, toggleCart }: Props): JSX.Element => {
   const cartItems = useAppSelector(cartItemsSelector);
 
+  const isLoggedIn = useAppSelector((state) => state.logIn.isLoggedIn);
+
   const navigate = useStableNavigate();
 
   const subTotal = useAppSelector((state) => state.cart.total);
@@ -61,86 +63,92 @@ const Cart = ({ openCart, toggleCart }: Props): JSX.Element => {
           onClick={() => toggleCart()}
         />
       </Stack>
-      {cartItems.length === 0 ? (
-        <Typography variant="h6" textAlign={"center"}>
-          cart is empty
-        </Typography>
-      ) : (
-        <Fragment>
-          <Stack gap={"1.5rem"}>
-            {cartItems.map((item, index) => (
-              <Stack
-                key={index}
-                direction={"row"}
-                alignItems={"center"}
-                justifyContent={"space-between"}
-                sx={{
-                  borderBottom: "1px solid #ffffff63",
-                  pb: 2,
-                }}
-              >
-                <Stack direction={"row"} gap={"1rem"}>
-                  <Box width={"41%"}>
-                    <img
-                      style={{
-                        maxWidth: "100%",
-                      }}
-                      src={item.imgSrc}
-                      alt="item"
-                    />
-                  </Box>
-                  <Stack justifyContent={"center"} gap={"0.7rem"}>
-                    <Typography variant="body1">{item.name}</Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        color: "text.secondary",
-                      }}
-                    >
-                      {item.brand}
-                    </Typography>
-                    <Stack
-                      width={"95px"}
-                      direction={"row"}
-                      sx={{
-                        border: "1px solid",
-                        borderColor: "#8a8a8a8a",
-                        p: 1,
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <RemoveOutlinedIcon
-                        onClick={() => dispatch(decrementByOne(item.name))}
+      {isLoggedIn ? (
+        cartItems.length === 0 ? (
+          <Typography variant="h6" textAlign={"center"}>
+            cart is empty
+          </Typography>
+        ) : (
+          <Fragment>
+            <Stack gap={"1.5rem"}>
+              {cartItems.map((item, index) => (
+                <Stack
+                  key={index}
+                  direction={"row"}
+                  alignItems={"center"}
+                  justifyContent={"space-between"}
+                  sx={{
+                    borderBottom: "1px solid #ffffff63",
+                    pb: 2,
+                  }}
+                >
+                  <Stack direction={"row"} gap={"1rem"}>
+                    <Box width={"41%"}>
+                      <img
+                        style={{
+                          maxWidth: "100%",
+                        }}
+                        src={item.imgSrc}
+                        alt="item"
+                      />
+                    </Box>
+                    <Stack justifyContent={"center"} gap={"0.7rem"}>
+                      <Typography variant="body1">{item.name}</Typography>
+                      <Typography
+                        variant="body2"
                         sx={{
-                          cursor: "pointer",
                           color: "text.secondary",
                         }}
-                      />
-                      <Box>{item.quantity}</Box>
-                      <AddOutlinedIcon
+                      >
+                        {item.brand}
+                      </Typography>
+                      <Stack
+                        width={"95px"}
+                        direction={"row"}
                         sx={{
-                          cursor: "pointer",
-                          color: "text.secondary",
+                          border: "1px solid",
+                          borderColor: "#8a8a8a8a",
+                          p: 1,
+                          alignItems: "center",
+                          justifyContent: "space-between",
                         }}
-                        onClick={() => dispatch(incrementByOne(item.name))}
-                      />
+                      >
+                        <RemoveOutlinedIcon
+                          onClick={() => dispatch(decrementByOne(item.name))}
+                          sx={{
+                            cursor: "pointer",
+                            color: "text.secondary",
+                          }}
+                        />
+                        <Box>{item.quantity}</Box>
+                        <AddOutlinedIcon
+                          sx={{
+                            cursor: "pointer",
+                            color: "text.secondary",
+                          }}
+                          onClick={() => dispatch(incrementByOne(item.name))}
+                        />
+                      </Stack>
                     </Stack>
                   </Stack>
+                  <Stack justifyContent={"space-between"} height={"100%"}>
+                    <CloseIcon
+                      sx={{
+                        cursor: "pointer",
+                      }}
+                      onClick={() => dispatch(removeItem(item.name))}
+                    />
+                    <Typography variant="body1">${item.price}</Typography>
+                  </Stack>
                 </Stack>
-                <Stack justifyContent={"space-between"} height={"100%"}>
-                  <CloseIcon
-                    sx={{
-                      cursor: "pointer",
-                    }}
-                    onClick={() => dispatch(removeItem(item.name))}
-                  />
-                  <Typography variant="body1">${item.price}</Typography>
-                </Stack>
-              </Stack>
-            ))}
-          </Stack>
-        </Fragment>
+              ))}
+            </Stack>
+          </Fragment>
+        )
+      ) : (
+        <Typography variant="h6" textAlign={"center"}>
+          Please Login to view your items
+        </Typography>
       )}
       <Stack direction={"row"} justifyContent={"space-between"}>
         <Typography variant="body1">SUBTOTAL</Typography>

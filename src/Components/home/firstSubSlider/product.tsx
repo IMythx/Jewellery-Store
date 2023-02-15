@@ -11,6 +11,7 @@ import {
   MenuItem,
   SelectChangeEvent,
   useMediaQuery,
+  Tooltip,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import LocalMallOutlinedIcon from "@mui/icons-material/LocalMallOutlined";
@@ -52,6 +53,8 @@ const Product = ({ src, brand, name, price, priceId }: Props): JSX.Element => {
 
   const isInCart = useAppSelector((state) => isItemInCartSelector(state, name));
 
+  const isLoggedIn = useAppSelector((state) => state.logIn.isLoggedIn);
+
   const isAddingItem = useAppSelector((state) =>
     itemIsBeingAddedSelector(state, name)
   );
@@ -65,6 +68,8 @@ const Product = ({ src, brand, name, price, priceId }: Props): JSX.Element => {
   const [activeModalImg, setActiveModalImg] = useState<number>(0);
 
   const [open, setOpen] = useState<boolean>(false);
+
+  const [openToolTip, setOpenToolTip] = useState<boolean>(false);
 
   const [size, setSize] = useState<string>("");
 
@@ -94,6 +99,10 @@ const Product = ({ src, brand, name, price, priceId }: Props): JSX.Element => {
   };
 
   const handleClose = () => setOpen(false);
+
+  const handleOpenToolTip = () => !isLoggedIn && setOpenToolTip(true);
+
+  const handleCloseToolTip = () => setOpenToolTip(false);
 
   return (
     <Fragment>
@@ -166,36 +175,58 @@ const Product = ({ src, brand, name, price, priceId }: Props): JSX.Element => {
                   }}
                   onClick={handleOpen}
                 />
-                <LoadingButton
-                  loading={isAddingItem}
-                  variant="outlined"
-                  sx={{
-                    minWidth: "auto",
-                    p: 0,
-                    border: "none !important",
-                  }}
-                  color={"primary"}
+                <Tooltip
+                  open={openToolTip}
+                  onClose={handleCloseToolTip}
+                  onOpen={handleOpenToolTip}
+                  title="please login first"
+                  arrow
+                  placement="top"
                 >
-                  <LocalMallOutlinedIcon
+                  <Box
+                    component={"span"}
                     sx={{
-                      fontSize: "2.3rem",
-                      p: "0.4rem",
-                      bgcolor: isInCart ? "primary.main" : "background.paper",
-                      color: isInCart
-                        ? "background.paper"
-                        : isAddingItem
-                        ? ""
-                        : "text.primary",
-                      borderRadius: "5px",
-                      cursor: isInCart ? "default" : "pointer",
-                      "&:hover": {
-                        bgcolor: "primary.main",
-                        color: "background.paper",
-                      },
+                      cursor: "default !important",
                     }}
-                    onClick={onClickHandler}
-                  />
-                </LoadingButton>
+                  >
+                    <LoadingButton
+                      loading={isAddingItem}
+                      variant="outlined"
+                      sx={{
+                        minWidth: "auto",
+                        p: 0,
+                        border: "none !important",
+                      }}
+                      color={"primary"}
+                      disabled={!isLoggedIn}
+                    >
+                      <LocalMallOutlinedIcon
+                        sx={{
+                          fontSize: "2.3rem",
+                          p: "0.4rem",
+                          bgcolor: isInCart
+                            ? "primary.main"
+                            : "background.paper",
+                          color: !isLoggedIn
+                            ? "text.secondary"
+                            : isInCart
+                            ? "background.paper"
+                            : isAddingItem
+                            ? ""
+                            : "text.primary",
+                          borderRadius: "5px",
+                          cursor:
+                            isInCart || !isLoggedIn ? "default" : "pointer",
+                          "&:hover": {
+                            bgcolor: "primary.main",
+                            color: "background.paper",
+                          },
+                        }}
+                        onClick={onClickHandler}
+                      />
+                    </LoadingButton>
+                  </Box>
+                </Tooltip>
               </Stack>
             </Stack>
           )}
@@ -379,30 +410,42 @@ const Product = ({ src, brand, name, price, priceId }: Props): JSX.Element => {
                   onClick={() => setCount((prev: number) => prev + 1)}
                 />
               </Stack>
-              <LoadingButton
-                loading={isAddingItem}
-                disableElevation
-                sx={{
-                  bgcolor: "#434343",
-                  color: "text.primary",
-                }}
-                fullWidth
-                variant="contained"
-                onClick={onClickHandler}
+              <Tooltip
+                open={openToolTip}
+                onClose={handleCloseToolTip}
+                onOpen={handleOpenToolTip}
+                title="please login first"
+                arrow
+                placement="top"
               >
-                {!isInCart ? (
-                  "Add to cart"
-                ) : (
-                  <Fragment>
-                    <CheckCircleOutlineIcon
-                      sx={{
-                        mr: "1rem",
-                      }}
-                    />
-                    Added
-                  </Fragment>
-                )}
-              </LoadingButton>
+                <Box component={"span"}>
+                  <LoadingButton
+                    loading={isAddingItem}
+                    disableElevation
+                    sx={{
+                      bgcolor: "#434343",
+                      color: "text.primary",
+                    }}
+                    fullWidth
+                    variant="contained"
+                    onClick={onClickHandler}
+                    disabled={!isLoggedIn}
+                  >
+                    {!isInCart ? (
+                      "Add to cart"
+                    ) : (
+                      <Fragment>
+                        <CheckCircleOutlineIcon
+                          sx={{
+                            mr: "1rem",
+                          }}
+                        />
+                        Added
+                      </Fragment>
+                    )}
+                  </LoadingButton>
+                </Box>
+              </Tooltip>
             </Stack>
           </Stack>
         </Paper>

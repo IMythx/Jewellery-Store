@@ -6,8 +6,9 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  Tooltip,
 } from "@mui/material";
-import { NavLink, redirect, useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import {
   useAppDispatch,
   useAppSelector,
@@ -51,6 +52,8 @@ const ItemDetails = (): JSX.Element => {
     isItemInCartSelector(state, item!)
   );
 
+  const isLoggedIn = useAppSelector((state) => state.logIn.isLoggedIn);
+
   const [activeImg, setActiveImg] = useState<number>(0);
 
   const [count, setCount] = useState<number>(1);
@@ -58,6 +61,8 @@ const ItemDetails = (): JSX.Element => {
   const [size, setSize] = useState<string>("S");
 
   const itemDoesExist = data[item!];
+
+  const [openToolTip, setOpenToolTip] = useState<boolean>(false);
 
   const isAddingItem = useAppSelector((state) =>
     itemIsBeingAddedSelector(state, item!)
@@ -76,6 +81,10 @@ const ItemDetails = (): JSX.Element => {
         })
       );
   };
+
+  const handleOpenToolTip = () => !isLoggedIn && setOpenToolTip(true);
+
+  const handleCloseToolTip = () => setOpenToolTip(false);
 
   useLayoutEffect(() => {
     !itemDoesExist && navigate("/notfound");
@@ -331,26 +340,43 @@ const ItemDetails = (): JSX.Element => {
               />
             </Stack>
           </Stack>
-          <LoadingButton
-            loading={isAddingItem}
-            disableElevation
-            fullWidth
-            variant="contained"
-            onClick={onClickHandler}
+          <Tooltip
+            open={openToolTip}
+            onClose={handleCloseToolTip}
+            onOpen={handleOpenToolTip}
+            title="please login first"
+            arrow
+            placement="top"
           >
-            {!isInCart ? (
-              "Add to cart"
-            ) : (
-              <Fragment>
-                <CheckCircleOutlineIcon
-                  sx={{
-                    mr: "1rem",
-                  }}
-                />
-                Added
-              </Fragment>
-            )}
-          </LoadingButton>
+            <Box
+              component={"span"}
+              sx={{
+                cursor: "default !important",
+              }}
+            >
+              <LoadingButton
+                loading={isAddingItem}
+                disableElevation
+                fullWidth
+                variant="contained"
+                onClick={onClickHandler}
+                disabled={!isLoggedIn}
+              >
+                {!isInCart ? (
+                  "Add to cart"
+                ) : (
+                  <Fragment>
+                    <CheckCircleOutlineIcon
+                      sx={{
+                        mr: "1rem",
+                      }}
+                    />
+                    Added
+                  </Fragment>
+                )}
+              </LoadingButton>
+            </Box>
+          </Tooltip>
           <Typography variant="body1" color={"text.secondary"}>
             It is a long established fact that a reader will be distracted by
             the readable content of a page when looking at its layout. The point
