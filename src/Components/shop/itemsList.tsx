@@ -1,4 +1,4 @@
-import { Box, Grid, Stack, useMediaQuery } from "@mui/material";
+import { Grid, Stack, useMediaQuery } from "@mui/material";
 import { useAppSelector } from "../../hooks/hooks";
 import { productsSelector } from "../../store/dataSlice";
 import { data } from "../../modules/data";

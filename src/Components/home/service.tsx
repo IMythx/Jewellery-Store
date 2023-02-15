@@ -1,6 +1,4 @@
-import { Stack, SvgIconTypeMap, ThemeOptions, Typography } from "@mui/material";
-import { OverridableComponent } from "@mui/material/OverridableComponent";
-import { createTheme } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 
 interface Props {
   Icon: React.ReactNode;
@@ -8,18 +6,6 @@ interface Props {
   details: string;
   children?: React.ReactNode;
 }
-
-const theme: ThemeOptions = createTheme({
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: 550,
-      md: 750,
-      lg: 1200,
-      xl: 1536,
-    },
-  },
-});
 
 const Service = ({ Icon, Name, details }: Props): JSX.Element => {
   return (

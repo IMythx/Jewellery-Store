@@ -3,7 +3,7 @@ import { appStarted, recivedData } from "../store/dataSlice";
 import { data } from "../modules/data";
 
 function* fetchData() {
-  const products: Promise<data> = yield call(
+  const products: Response = yield call(
     fetch,
     "https://jewellery--store-default-rtdb.europe-west1.firebasedatabase.app/data.json"
   );

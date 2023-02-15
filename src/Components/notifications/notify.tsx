@@ -2,7 +2,7 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import CloseIcon from "@mui/icons-material/Close";
 import { Stack } from "@mui/material";
 import { useAppDispatch } from "../../hooks/hooks";
-import { memo, forwardRef } from "react";
+import { memo } from "react";
 
 interface Props {
   notify: string;

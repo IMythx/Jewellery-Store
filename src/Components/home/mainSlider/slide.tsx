@@ -5,7 +5,6 @@ import image2 from "../../../assets/banner2.jpg";
 import image3 from "../../../assets/banner3.jpg";
 import { NavLink } from "react-router-dom";
 import { useRef } from "react";
-import { createTheme, ThemeOptions } from "@mui/material";
 interface Props {
   currentSlide: number;
   title: string;
