@@ -328,7 +328,7 @@ const Product = ({ src, brand, name, price, priceId }: Props): JSX.Element => {
                   arrows={true}
                   prevArrow={<PrevArrow />}
                   nextArrow={<NextArrow />}
-                  afterChange={(index) => setActiveModalImg(index)}
+                  beforeChange={(index, newIndex) => setActiveModalImg(newIndex)}
                 >
                   {data[`${name}`].src.map((src) => (
                     <Box
