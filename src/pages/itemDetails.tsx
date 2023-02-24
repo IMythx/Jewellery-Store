@@ -176,7 +176,7 @@ const ItemDetails = (): JSX.Element => {
               arrows={true}
               prevArrow={<PrevArrow />}
               nextArrow={<NextArrow />}
-              afterChange={(index) => setActiveImg(index)}
+              beforeChange={(index, newIndex) => setActiveImg(newIndex)}
             >
               {data[`${item}`]?.src?.map((src, index) => (
                 <Box
