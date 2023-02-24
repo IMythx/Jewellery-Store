@@ -255,7 +255,7 @@ const Product = ({ src, brand, name, price, priceId }: Props): JSX.Element => {
           sx={{
             position: "relative",
             top: {
-              md: "40%",
+              md: "50VH",
               xs: "52%",
             },
             left: "50%",
